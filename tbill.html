@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-Bill Earnings Calculator</title>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>T-Bill Earnings Calculator</h1>
+
+  <label for="principal">Principal Amount:</label>
+  <input type="number" id="principal" placeholder="Enter principal amount" required>
+
+  <label for="interest">Discount Rate (%):</label>
+  <input type="number" id="interest" placeholder="Enter discount rate" required>
+
+  <label for="maturity">Maturity Date (in days):</label>
+  <input type="number" id="maturity" placeholder="Enter maturity period in days" required>
+
+  <label for="reinvest">Number of times to reinvest in a year:</label>
+  <input type="number" id="reinvest" placeholder="Enter number of reinvestments in a year" required>
+
+  <button onclick="calculateEarnings()">Calculate Earnings</button>
+
+  <p id="error"></p>
+  <p id="result"></p>
+
+  <script>
+    function calculateEarnings() {
+      // Get user input
+      const principal = parseFloat(document.getElementById("principal").value);
+      const discountRate = parseFloat(document.getElementById("interest").value);
+      const maturityDays = parseInt(document.getElementById("maturity").value);
+      const reinvestmentsPerYear = parseInt(document.getElementById("reinvest").value);
+
+      // Calculate the number of days left in the year after considering maturity
+      const daysLeftInYear = 365 - maturityDays;
+
+      // Calculate the maximum allowed reinvestments based on the remaining days in the year
+      const maxReinvestments = Math.floor(daysLeftInYear / maturityDays);
+
+      // Validate user input
+      if (reinvestmentsPerYear > maxReinvestments) {
+        document.getElementById("error").innerHTML = `Error: Maximum allowed reinvestments in a year is ${maxReinvestments}.`;
+        document.getElementById("result").innerHTML = "";
+        return;
+      }
+
+      // Clear previous error message
+      document.getElementById("error").innerHTML = "";
+
+      // Calculate the number of times the capital can be reinvested based on the remaining days in the year
+     // Calculate the number of times the capital can be reinvested based on the remaining days in the year
+const reinvestmentFrequency = daysLeftInYear / maturityDays;
+const totalReinvestments = Math.floor(reinvestmentsPerYear);
+
+// Calculate earnings based on the discount rate and reinvestment frequency
+const totalEarnings = principal * (1 - Math.pow(1 - discountRate / 100, totalReinvestments));
+
+      // Display the result
+      document.getElementById("result").innerHTML = `Total Earnings: $${totalEarnings.toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>
