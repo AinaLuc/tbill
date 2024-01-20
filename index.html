@@ -58,6 +58,24 @@
       font-weight: bold;
       color: #333;
     }
+
+    #diagram-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .diagram {
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .diagram canvas {
+      display: block;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -80,6 +98,21 @@
 
   <p id="error"></p>
   <p id="result"></p>
+
+  <div id="diagram-container">
+    <div class="diagram" id="daily-diagram">
+      <canvas id="dailyCanvas" width="150" height="100"></canvas>
+      <p>Daily Return</p>
+    </div>
+    <div class="diagram" id="monthly-diagram">
+      <canvas id="monthlyCanvas" width="150" height="100"></canvas>
+      <p>Monthly Return</p>
+    </div>
+    <div class="diagram" id="final-diagram">
+      <canvas id="finalCanvas" width="150" height="100"></canvas>
+      <p>Final Maturity</p>
+    </div>
+  </div>
 
   <script>
     function calculateEarnings() {
@@ -106,15 +139,53 @@
       document.getElementById("error").innerHTML = "";
 
       // Calculate the number of times the capital can be reinvested based on the remaining days in the year
+         // Calculate the number of times the capital can be reinvested based on the remaining days in the year
      // Calculate the number of times the capital can be reinvested based on the remaining days in the year
 const reinvestmentFrequency = daysLeftInYear / maturityDays;
 const totalReinvestments = Math.floor(reinvestmentsPerYear);
 
 // Calculate earnings based on the discount rate and reinvestment frequency
 const totalEarnings = principal * (1 - Math.pow(1 - discountRate / 100, totalReinvestments));
+// Calculate daily return
+const dailyReturn = totalEarnings / maturityDays;
+
+// Calculate monthly return
+const numberOfMonths = Math.floor(maturityDays / 30);
+
+const monthlyReturn = totalEarnings /numberOfMonths;
+
 
       // Display the result
       document.getElementById("result").innerHTML = `Total Earnings: $${totalEarnings.toFixed(2)}`;
+
+      // Draw diagrams
+     // drawDiagram(principal * (discountRate / 100), "dailyCanvas");
+    // Draw diagrams
+// Draw diagrams
+// Draw diagrams
+drawDiagram(dailyReturn, "dailyCanvas");
+drawDiagram(monthlyReturn, "monthlyCanvas");
+drawDiagram(totalEarnings, "finalCanvas");
+
+
+    }
+
+    function drawDiagram(earnings, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw a simple bar chart
+      ctx.fillStyle = "#4caf50";
+      ctx.fillRect(0, 0, earnings, canvas.height);
+
+      // Draw the earnings value in the center
+      ctx.fillStyle = "#333";
+      ctx.font = "12px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`$${earnings.toFixed(2)}`, canvas.width / 2, canvas.height / 2);
     }
   </script>
 
